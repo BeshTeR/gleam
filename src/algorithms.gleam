@@ -105,4 +105,23 @@ fn pythag_make(a, b: Int, res: List(#(Int, Int, Int))) -> List(#(Int, Int, Int))
     _, _ -> pythag_make(a, b - 1, [#(b, a, c), ..res])
   }
 }
+
+/// ----------------------------------------------------------------------------
+/// Проверка числа на простоту
+pub fn is_prime(n: Int) -> Bool {
+  case n % 2 {
+    _ if n < 0 -> is_prime(-n)
+    _ if n < 2 -> False
+    0 -> n == 2
+    _ -> is_prime_loop(n, 3)
+  }
+}
+
+fn is_prime_loop(n, acc: Int) -> Bool {
+  case acc * acc > n, n % acc {
+    True, _ -> True
+    _, 0 -> False
+    _, _ -> is_prime_loop(n, acc + 2)
+  }
+}
 /// ----------------------------------------------------------------------------

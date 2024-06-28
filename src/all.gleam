@@ -3,6 +3,6 @@ import gleam/io
 import algorithms
 
 pub fn main() {
-  let res = algorithms.pythag(100)
+  let res = algorithms.is_prime(127)
   io.debug(res)
 }
