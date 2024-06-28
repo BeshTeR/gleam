@@ -1,3 +1,4 @@
+/// Точка входа для тестирования
 import gleam/io
 
 import algorithms
