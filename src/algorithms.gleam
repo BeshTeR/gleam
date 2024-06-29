@@ -1,6 +1,7 @@
 //// Реализация некоторых алгоритмов
 //// Oleg Muraviev <avesh.net@bk.ru>
 
+import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/io
@@ -60,7 +61,7 @@ fn fib_loop(n, a, b, p, q: Int) -> Int {
 /// N ^ M = N * (N ^ (M - 1)) - если M нечетно
 /// N, M - натуральные числа
 pub fn pow(n, m: Int) -> Int {
-  case n >= 1 || m >= 0 {
+  case n >= 1 && m >= 0 {
     True -> pow_loop(n, m, 1)
     False -> 0
   }
@@ -147,28 +148,5 @@ fn factors_loop(n: Int, res: #(Int, List(Int))) -> List(Int) {
         False -> factors_loop(n, #(m + 1, ls))
       }
   }
-}
-
-/// ----------------------------------------------------------------------------
-/// Список простых чисел меньших или равных заданному натуральному числу
-pub fn primes(n: Int) -> List(Int) {
-  todo
-  // list(1) ->
-  //  [];
-  // list(N) when is_integer(N), N > 1 ->
-  //  Set = ordsets:from_list(lists:seq(3, N, 2)),
-  //  ordsets:add_element(2, sieve(N, Set, Set, ordsets:new())).
-  //
-  // sieve(_, Set1, Set2, Primes) when length(Set2) =:= 0 ->
-  //  ordsets:union(Primes, Set1);
-  // sieve(N, Set1, Set2, Primes) ->
-  //  H = lists:nth(1,string:substr(Set1, 1, 1)),
-  //  {R1, R2} = remove_multiples_of(H, ordsets:del_element(H, Set1), Set2),
-  //  sieve(N, R1, R2, ordsets:add_element(H, Primes)).
-  //
-  // remove_multiples_of(N, Set1, Set2) ->
-  //  NewSet = ordsets:filter(fun(X) -> X >= N*N end, Set2),
-  //  R = ordsets:filter(fun(X) -> X rem N =:= 0 end, NewSet),
-  //  {ordsets:subtract(Set1, R), ordsets:subtract(NewSet, R)}.
 }
 /// ----------------------------------------------------------------------------

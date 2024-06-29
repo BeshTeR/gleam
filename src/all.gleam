@@ -4,6 +4,6 @@ import gleam/io
 import algorithms
 
 pub fn main() {
-  let res = algorithms.pow(1024, 100)
+  let res = algorithms.pow(2, 10_000)
   io.debug(res)
 }
