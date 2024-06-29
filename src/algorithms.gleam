@@ -67,9 +67,9 @@ pub fn pow(n, m: Int) -> Int {
 }
 
 fn pow_loop(n, m, acc: Int) -> Int {
-  case m % 2, m {
-    _, 0 -> acc
-    0, _ -> pow_loop(n * n, m / 2, acc)
+  case m, m % 2 {
+    0, _ -> acc
+    _, 0 -> pow_loop(n * n, m / 2, acc)
     _, _ -> pow_loop(n, m - 1, n * acc)
   }
 }
@@ -131,20 +131,21 @@ fn is_prime_loop(n, acc: Int) -> Bool {
 /// ----------------------------------------------------------------------------
 /// Разложение натурального числа на простые множители
 pub fn factors(n: Int) -> List(Int) {
-  case n {
-    _ if n <= 1 -> []
-    _ -> list.reverse(factors_loop(n, #(2, [])))
+  case n <= 1 {
+    True -> []
+    False -> list.reverse(factors_loop(n, #(2, [])))
   }
 }
 
 fn factors_loop(n: Int, res: #(Int, List(Int))) -> List(Int) {
   let #(m, ls) = res
-  let p = m * m
-  let q = n % m
-  case p > n, q {
-    True, _ -> [n, ..ls]
-    False, 0 -> factors_loop(n / m, #(m, [m, ..ls]))
-    False, _ -> factors_loop(n, #(m + 1, ls))
+  case m * m > n {
+    True -> [n, ..ls]
+    False ->
+      case n % m == 0 {
+        True -> factors_loop(n / m, #(m, [m, ..ls]))
+        False -> factors_loop(n, #(m + 1, ls))
+      }
   }
 }
 
