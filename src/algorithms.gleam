@@ -101,8 +101,8 @@ fn pythag_make(a, b: Int, res: List(#(Int, Int, Int))) -> List(#(Int, Int, Int))
 
   case a < 4, b < 3 {
     True, _ -> res
-    _, True -> pythag_make(a - 1, a - 2, [#(b, a, c), ..res])
-    _, _ -> pythag_make(a, b - 1, [#(b, a, c), ..res])
+    False, True -> pythag_make(a - 1, a - 2, [#(b, a, c), ..res])
+    False, False -> pythag_make(a, b - 1, [#(b, a, c), ..res])
   }
 }
 
@@ -118,10 +118,56 @@ pub fn is_prime(n: Int) -> Bool {
 }
 
 fn is_prime_loop(n, acc: Int) -> Bool {
-  case acc * acc > n, n % acc {
-    True, _ -> True
-    _, 0 -> False
-    _, _ -> is_prime_loop(n, acc + 2)
+  case acc * acc > n {
+    True -> True
+    False ->
+      case n % acc {
+        0 -> False
+        _ -> is_prime_loop(n, acc + 2)
+      }
   }
+}
+
+/// ----------------------------------------------------------------------------
+/// Разложение натурального числа на простые множители
+pub fn factors(n: Int) -> List(Int) {
+  case n {
+    _ if n <= 1 -> []
+    _ -> list.reverse(factors_loop(n, #(2, [])))
+  }
+}
+
+fn factors_loop(n: Int, res: #(Int, List(Int))) -> List(Int) {
+  let #(m, ls) = res
+  let p = m * m
+  let q = n % m
+  case p > n, q {
+    True, _ -> [n, ..ls]
+    False, 0 -> factors_loop(n / m, #(m, [m, ..ls]))
+    False, _ -> factors_loop(n, #(m + 1, ls))
+  }
+}
+
+/// ----------------------------------------------------------------------------
+/// Список простых чисел меньших или равных заданному натуральному числу
+pub fn primes(n: Int) -> List(Int) {
+  todo
+  // list(1) ->
+  //  [];
+  // list(N) when is_integer(N), N > 1 ->
+  //  Set = ordsets:from_list(lists:seq(3, N, 2)),
+  //  ordsets:add_element(2, sieve(N, Set, Set, ordsets:new())).
+  //
+  // sieve(_, Set1, Set2, Primes) when length(Set2) =:= 0 ->
+  //  ordsets:union(Primes, Set1);
+  // sieve(N, Set1, Set2, Primes) ->
+  //  H = lists:nth(1,string:substr(Set1, 1, 1)),
+  //  {R1, R2} = remove_multiples_of(H, ordsets:del_element(H, Set1), Set2),
+  //  sieve(N, R1, R2, ordsets:add_element(H, Primes)).
+  //
+  // remove_multiples_of(N, Set1, Set2) ->
+  //  NewSet = ordsets:filter(fun(X) -> X >= N*N end, Set2),
+  //  R = ordsets:filter(fun(X) -> X rem N =:= 0 end, NewSet),
+  //  {ordsets:subtract(Set1, R), ordsets:subtract(NewSet, R)}.
 }
 /// ----------------------------------------------------------------------------
