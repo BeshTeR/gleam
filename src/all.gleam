@@ -10,6 +10,6 @@ pub fn now() -> DateTime
 
 pub fn main() {
   // io.debug(now())
-  algorithms.prime_numbers(1_000_000)
+  algorithms.factors(111 * 127 * 12)
   |> io.debug()
 }

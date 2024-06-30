@@ -2,11 +2,13 @@
 //// Oleg Muraviev <avesh.net@bk.ru>
 
 import gleam/bool
+import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/io
 import gleam/list
 import gleam/result
+import gleam/set.{type Set}
 
 /// ----------------------------------------------------------------------------
 /// FizzBuzz
@@ -134,14 +136,14 @@ fn is_prime_loop(n, acc: Int) -> Bool {
 pub fn factors(n: Int) -> List(Int) {
   case n <= 1 {
     True -> []
-    False -> list.reverse(factors_loop(n, #(2, [])))
+    False -> factors_loop(n, #(2, []))
   }
 }
 
 fn factors_loop(n: Int, res: #(Int, List(Int))) -> List(Int) {
   let #(m, ls) = res
   case m * m > n {
-    True -> [n, ..ls]
+    True -> [n, ..ls] |> list.reverse()
     False ->
       case n % m == 0 {
         True -> factors_loop(n / m, #(m, [m, ..ls]))
@@ -155,7 +157,7 @@ fn factors_loop(n: Int, res: #(Int, List(Int))) -> List(Int) {
 pub fn primes(n: Int) -> List(Int) {
   case n < 2 {
     True -> []
-    False -> list.filter(list.range(2, n), is_prime)
+    False -> list.range(2, n) |> list.filter(is_prime)
   }
 }
 
@@ -172,7 +174,8 @@ pub fn prime_numbers(n: Int) -> Int {
 fn prime_numbers_loop(k, n, acc: Int) -> Int {
   case k > n {
     True -> acc
-    False -> prime_numbers_loop(k + 2, n, acc + bool.to_int(is_prime(k)))
+    False ->
+      prime_numbers_loop(k + 2, n, acc + { is_prime(k) |> bool.to_int() })
   }
 }
 /// ----------------------------------------------------------------------------
