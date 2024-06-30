@@ -1,6 +1,7 @@
 //// Реализация некоторых алгоритмов
 //// Oleg Muraviev <avesh.net@bk.ru>
 
+import gleam/bool
 import gleam/float
 import gleam/int
 import gleam/io
@@ -155,6 +156,23 @@ pub fn primes(n: Int) -> List(Int) {
   case n < 2 {
     True -> []
     False -> list.filter(list.range(2, n), is_prime)
+  }
+}
+
+/// ----------------------------------------------------------------------------
+/// Количество простых чисел меньших заданного натурального числа
+pub fn prime_numbers(n: Int) -> Int {
+  case n == 2 {
+    True -> 1
+    False if n < 2 -> 0
+    False -> prime_numbers_loop(3, n, 1)
+  }
+}
+
+fn prime_numbers_loop(k, n, acc: Int) -> Int {
+  case k > n {
+    True -> acc
+    False -> prime_numbers_loop(k + 2, n, acc + bool.to_int(is_prime(k)))
   }
 }
 /// ----------------------------------------------------------------------------
