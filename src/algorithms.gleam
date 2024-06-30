@@ -1,7 +1,6 @@
 //// Реализация некоторых алгоритмов
 //// Oleg Muraviev <avesh.net@bk.ru>
 
-import gleam/dict
 import gleam/float
 import gleam/int
 import gleam/io
@@ -147,6 +146,15 @@ fn factors_loop(n: Int, res: #(Int, List(Int))) -> List(Int) {
         True -> factors_loop(n / m, #(m, [m, ..ls]))
         False -> factors_loop(n, #(m + 1, ls))
       }
+  }
+}
+
+/// ----------------------------------------------------------------------------
+/// Список простых чисел меньших заданного натурального числа
+pub fn primes(n: Int) -> List(Int) {
+  case n < 2 {
+    True -> []
+    False -> list.filter(list.range(2, n), is_prime)
   }
 }
 /// ----------------------------------------------------------------------------
